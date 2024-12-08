@@ -1,7 +1,6 @@
 # Script-IBBC
 Este script automatiza o tratamento e análise de ficheiros FASTQ utilizados em bioinformática, organizando um workflow eficiente com as ferramentas FastQC, MultiQC e Fastp.
 
-Objetivo do Script
 O objetivo deste script é realizar um workflow completo de análise de dados biológicos em formato FASTQ. Este pipeline inclui as seguintes etapas:
 
 1. Criação de uma estrutura de diretórias organizada para armazenar os ficheiros de entrada, resultados processados e logs.
