@@ -23,23 +23,6 @@ No fim desta etapa, os ficheiros processados são armazenados em "processed.data
 
 Na etapa final, o FastQC é novamente executado para reavaliar a qualidade dos ficheiros tratados, seguido por um segundo relatório consolidado com MultiQC, permitindo comparar os resultados antes e depois do tratamento. Todas as etapas são documentadas em um ficheiro log, garantindo rastreabilidade. O script organiza os dados e resultados de forma estruturada, automatiza tarefas repetitivas e oferece flexibilidade na configuração dos parâmetros, proporcionando um workflow eficiente, reprodutível e fácil de interpretar.
 
-Estrutura das Pastas Criadas pelo Script:
-
-nome_da_diretoria_base/
-├── raw.data/                  # Ficheiros FASTQ brutos
-├── processed.data/
-│   ├── fastqc/                # Resultados FastQC (antes e depois do Fastp)
-│   ├── trimmed/               # Ficheiros processados com Fastp
-│   ├── multiqc/               # Relatórios consolidados MultiQC
-└── log.txt                    # Ficheiro de log com o histórico das operações
-
-O ficheiro samples.txt é essencial para o funcionamento do script, pois contém a lista de ficheiros FASTQ que serão processados. Este ficheiro deve seguir um formato tabulado específico com três colunas: o nome da amostra, o tratamento associado (se aplicável) e o nome do ficheiro FASTQ correspondente. Por exemplo:
-
-Sample1    TratamentoA    sample1_1_aaa.fastq.gz
-Sample1    TratamentoA    sample1_2_aaa.fastq.gz
-Sample2    TratamentoB    sample2_1_aaa.fastq.gz
-Sample2    TratamentoB    sample2_2_aaa.fastq.gz
-
 
 
 
