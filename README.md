@@ -1,45 +1,126 @@
-# Script-IBBC
-Este script automatiza o tratamento e análise de ficheiros FASTQ utilizados em bioinformática, organizando um workflow eficiente com as ferramentas FastQC, MultiQC e Fastp.
+# Script de Tratamento de Dados - Bioinformática
 
-O objetivo deste script é realizar um workflow completo de análise de dados biológicos em formato FASTQ. Este pipeline inclui as seguintes etapas:
+## Workflow Implementado
 
-1. Criação de uma estrutura de diretórias organizada para armazenar os ficheiros de entrada, resultados processados e logs.
-2. Cópia e organização dos ficheiros FASTQ que serão processados, a partir de um ficheiro de amostras.
-3. Execução de análises FastQC iniciais para avaliar a qualidade dos ficheiros brutos.
-4. Relatório MultiQC consolidando os resultados do FastQC inicial.
-5. Pré-processamento com Fastp, que inclui trimming de adaptadores e correção de qualidade, permitindo a escolha entre parâmetros padrão ou personalizados.
-6. Execução de análises FastQC pós-processamento para avaliar os ficheiros resultantes do Fastp.
-7. Relatório MultiQC final consolidando os resultados pós-tratamento.
-8. Registo completo de todas as operações realizadas em um ficheiro de log.
+O script realiza o seguinte fluxo de processamento:
 
-Este script automatiza o tratamento e análise de ficheiros FASTQ, amplamente utilizados em bioinformática, através de um workflow integrado com as ferramentas FastQC, MultiQC e Fastp. Inicialmente, o script solicita ao utilizador o nome de uma diretoria base válida, cria a estrutura necessária para armazenar os ficheiros (como "raw.data" para os dados brutos e "processed.data" para os resultados processados), e copia os ficheiros FASTQ listados em "samples.txt" para a diretoria de entrada. A ativação do ambiente Conda é necessária para garantir o funcionamento das ferramentas.
+1. **FastQC**: Qualidade inicial dos arquivos FASTQ.
+2. **MultiQC**: Gera relatórios agregados dos resultados do FastQC.
+3. **Fastp**: Realiza o trimming e filtragem dos arquivos FASTQ.
+4. **FastQC (novamente)**: Qualidade dos arquivos após o trimming.
+5. **MultiQC (novamente)**: Relatórios finais agregados.
 
-Na primeira fase da análise, o FastQC é executado para avaliar a qualidade dos ficheiros brutos, e um relatório consolidado é gerado com o MultiQC. De seguida, o script realiza o pré-processamento dos ficheiros com Fastp. Aqui, o utilizador tem a flexibilidade de escolher entre dois modos para os parâmetros de processamento:
-1- Parâmetros padrão: Neste caso, o script utiliza valores predefinidos, como trimming automático dos primeiros e últimos nucleótidos, qualidade mínima, tamanho máximo das leituras, entre outros. Esta opção é recomendada para utilizadores que desejam uma execução rápida e confiável sem necessidade de ajustes manuais.
-2- Parâmetros personalizados: Ao escolher esta opção, o utilizador pode inserir manualmente os valores para cada parâmetro, como --trim_front1, --trim_tail1, --max_len1 e --qualified_quality_phred. Esta flexibilidade permite adaptar o Fastp às necessidades específicas do conjunto de dados, garantindo um controlo mais preciso sobre o processo de pré-processamento. 
-Aqui também é detetado automaticamente se as amostras fornecidas são pair-end e single-end, sem necessidade de interação com o utilizador.
+---
 
-No fim desta etapa, os ficheiros processados são armazenados em "processed.data/trimmed", gerando relatórios HTML e JSON individuais.
+## Requisitos
 
-Na etapa final, o FastQC é novamente executado para reavaliar a qualidade dos ficheiros tratados, seguido por um segundo relatório consolidado com MultiQC, permitindo comparar os resultados antes e depois do tratamento. Todas as etapas são documentadas em um ficheiro log, garantindo rastreabilidade. O script organiza os dados e resultados de forma estruturada, automatiza tarefas repetitivas e oferece flexibilidade na configuração dos parâmetros, proporcionando um workflow eficiente, reprodutível e fácil de interpretar.
+Antes de executar o script, assegure-se de ter instalado os seguintes softwares:
 
-!!!Para o utilizador!!! 
-O ficheiro samples.txt tem de ter o seguinte formato.
-1ª coluna-nome da amostra
-2ª coluna-Tratamento (ou qualquer categoria de agrupamento)
-3ª coluna-Nome do ficheiro FASTQ
+- [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [**MultiQC**](https://multiqc.info/)
+- [**Fastp**](https://github.com/OpenGene/fastp)
+- [**Conda**](https://docs.conda.io/en/latest/) para gerir ambientes.
 
-Sample1    TratamentoA    sample1_1_aaa.fastq.gz
-Sample1    TratamentoA    sample1_2_aaa.fastq.gz
-Sample2    TratamentoB    sample2_1_aaa.fastq.gz
-Sample2    TratamentoB    sample2_2_aaa.fastq.gz
-Sample3    TratamentoC    sample3.fastq.gz
-
-Certifique-se de que o samples.txt esteja localizado na pasta apropriada (diretoria de origem especificada no script).
-O script irá ler linha a linha, copiar os ficheiros para a pasta raw.data e proceder com a análise.
+> É necessário criar um ambiente **Conda** que contenha os programas acima instalados.
 
 
+---
 
+## Estrutura do Script
 
+Ao executar, o script cria a seguinte estrutura de diretórios:
 
+```
+<NOME_BASE_DIR>/
+|-- raw.data/               # Dados brutos (FASTQ)
+|-- processed.data/
+    |-- fastqc/             # Resultados do FastQC
+    |-- trimmed/            # Arquivos processados pelo Fastp
+    |-- multiqc/            # Relatórios MultiQC
+|-- log.txt                 # Log do processamento
+```
 
+---
+
+## Como Executar
+
+1. Clone o repositório:
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   cd <NOME_DO_REPOSITORIO>
+   ```
+
+2. Torne o script executável:
+   ```bash
+   chmod +x Script64337.sh
+   ```
+
+3. Execute o script:
+   ```bash
+   ./Script64337.sh
+   ```
+
+4. Durante a execução:
+   - Insira o **nome da diretoria** onde o script irá criar os arquivos (sem espaços).
+   - Informe o **ambiente Conda** contendo os programas.
+   - Escolha entre parâmetros padrão ou personalizados para o **Fastp**.
+
+---
+
+## Parâmetros Default do Fastp
+
+Caso escolha usar os valores padrão, os seguintes parâmetros serão utilizados:
+
+- `--trim_front1 3`
+- `--trim_tail1 3`
+- `--max_len1 150`
+- `--qualified_quality_phred 20`
+- `--cut_window_size 4`
+- `--cut_mean_quality 20`
+- `--detect_adapter_for_pe`
+
+---
+
+## Arquivos Necessários
+
+O script espera a existência de dois arquivos/diretórios principais:
+
+1. **samples.txt**: Arquivo contendo os nomes dos arquivos FASTQ e tratamentos.
+   - Caminho padrão: `/home/fc64337/IBBC/Exame/samples.txt`
+   - Formato:
+     ```
+     Sample<TAB>Treatment<TAB>FILENAME
+     ```
+   - Este path pode ser alterado pelo user!
+
+2. **Diretório com arquivos FASTQ**: Local dos arquivos brutos.
+   - Caminho padrão: `/home/fc64337/IBBC/Exame/`
+   - Este path também pode ser alterado pelo user!
+
+---
+
+## Outputs Geradoss
+
+- **FastQC**: Relatórios individuais de qualidade para cada arquivo.
+- **MultiQC**: Relatórios agregados para visualização geral dos resultados.
+- **Fastp**: Arquivos FASTQ trimados e relatórios em formato **HTML** e **JSON**.
+- **log.txt**: Log contendo todas as operações realizadas durante o processamento.
+
+---
+
+## Exemplo de Uso
+
+```bash
+./Script64337.sh
+```
+
+- Ao ser solicitado, insira:
+   - Nome da diretoria base (ex: `bioinfo_results`)
+   - Nome do ambiente Conda (ex: `bioinfo_env`)
+
+---
+
+## Autor
+
+**Diogo Antunes**  
+Desenvolvido para a Unidade Curricular: **Introdução à Bioinformática e Biologia Computacional**.
